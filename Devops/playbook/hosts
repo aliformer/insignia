@@ -1,0 +1,15 @@
+[kubernetes_master_nodes]
+kubernetes-master ansible_host=34.125.192.249
+
+[kubernetes_worker_nodes]
+
+
+
+[kubernetes:children]
+kubernetes_master_nodes
+kubernetes_worker_nodes
+
+[kubernetes:vars]
+ansible_connection=ssh 
+
+
