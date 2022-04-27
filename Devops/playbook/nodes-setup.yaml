@@ -6,7 +6,6 @@
   connection: ssh
   
   tasks:
-   
    - name: Make the Swap inactive
      command: swapoff -a
 
@@ -57,6 +56,7 @@
          - vim
          - software-properties-common
        state: present
+       force_apt_get: yes
 
    - name: Add Docker’s official GPG key
      apt_key:
@@ -75,6 +75,8 @@
        name:
          - containerd.io
        state: present
+       force_apt_get: yes
+       
 
    - name: Configure containerd.
      file:
@@ -110,6 +112,7 @@
          - kubectl
          - kubelet
        state: present
+       force_apt_get: yes
 
    - name: Enable service kubelet, and enable persistently
      service: 

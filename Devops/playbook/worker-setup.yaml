@@ -1,9 +1,7 @@
 ---
-- hosts: masters
+- hosts: kubernetes_master_nodes
   become: yes
   become_method: sudo
-  become_user: root
-  gather_facts: yes
   connection: ssh
 
   tasks:
@@ -20,13 +18,9 @@
      local_action: copy content="{{ kubernetes_join_command.stdout_lines[0] }}" dest="/tmp/kubernetes_join_command" mode=0777
 
 
-- hosts: workers
+- hosts: kubernetes_worker_nodes
   become: yes
-  become_method: sudo
-  become_user: root
-  gather_facts: yes
   connection: ssh
-
   tasks:
 
    - name: Copy join command to worker nodes.

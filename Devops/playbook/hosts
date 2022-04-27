@@ -1,15 +1,16 @@
 [kubernetes_master_nodes]
-kubernetes-master ansible_host=34.125.192.249
+kubernetes-master-1 ansible_host=34.101.203.127
 
 [kubernetes_worker_nodes]
-
-
+kubernetes-worker-1 ansible_host=34.101.107.34
 
 [kubernetes:children]
 kubernetes_master_nodes
 kubernetes_worker_nodes
 
+
 [kubernetes:vars]
-ansible_connection=ssh 
+ansible_connection = ssh
+ansible_user = anoni
 
 

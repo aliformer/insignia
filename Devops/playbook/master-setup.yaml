@@ -1,0 +1,28 @@
+- hosts: kubernetes_master_nodes
+  become: yes
+  tasks:
+  - name: remove swap
+    shell: "swapoff -a"
+    
+  - name: initialize the cluster
+    shell: sudo kubeadm init \ --pod-network-cidr=192.168.0.0/16 \ --cri-socket /run/containerd/containerd.sock \ --upload-certs \ --control-plane-endpoint=k8s-cluster.computingforgeeks.com >> cluster_initialized.txt
+    args:
+      chdir: $HOME
+      creates: cluster_initialized.txt
+  
+  - name: create .kube directory
+    file:
+      path: /home/ubuntu/.kube
+      state: directory
+  
+  - name: copy admin.conf to user's kube config
+    copy:
+      src: /etc/kubernetes/admin.conf
+      dest: /home/ubuntu/.kube/config
+      remote_src: yes 
+
+  - name: install Pod network
+    shell: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml \ kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml >> pod_network_setup.txt
+    args:
+      chdir: $HOME
+      creates: pod_network_setup.txt
