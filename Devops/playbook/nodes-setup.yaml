@@ -1,11 +1,13 @@
-- hosts: "all"
+---
+- hosts: "kubernetes_master_nodes, kubernetes_worker_nodes"
+  remote_user: anoni
   become: yes
   become_method: sudo
   become_user: root
   gather_facts: yes
-  connection: ssh
-  
+
   tasks:
+   
    - name: Make the Swap inactive
      command: swapoff -a
 
@@ -14,37 +16,6 @@
        dest: /etc/fstab
        regexp: swap
        state: absent
-
-   - name: Create a empty file for containerd module.
-     copy:
-       content: ""
-       dest: /etc/modules-load.d/containerd.conf
-       force: no
-
-   - name: Configure module for containerd.
-     blockinfile:
-       path: /etc/modules-load.d/containerd.conf 
-       block: |
-            overlay
-            br_netfilter
-
-   - name: Create a empty file for kubernetes sysctl params.
-     copy:
-       content: ""
-       dest: /etc/sysctl.d/99-kubernetes-cri.conf
-       force: no
-
-   - name: Configure sysctl params for Kubernetes.
-     lineinfile:
-       path: /etc/sysctl.d/99-kubernetes-cri.conf 
-       line: "{{ item }}"
-     with_items:
-       - 'net.bridge.bridge-nf-call-iptables  = 1'
-       - 'net.ipv4.ip_forward                 = 1'
-       - 'net.bridge.bridge-nf-call-ip6tables = 1'
-
-   - name: Apply sysctl params without reboot.
-     command: sysctl --system
 
    - name: Installing Prerequisites for Kubernetes
      apt: 
@@ -68,30 +39,21 @@
        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
        state: present
        filename: docker
-       update_cache: yes
+       mode: 0600
 
-   - name: Install containerd.
+   - name: Install Docker Engine.
      apt: 
        name:
+         - docker-ce
+         - docker-ce-cli
          - containerd.io
        state: present
        force_apt_get: yes
-       
 
-   - name: Configure containerd.
-     file:
-       path: /etc/containerd
-       state: directory
-
-   - name: Configure containerd.
-     shell: /usr/bin/containerd config default > /etc/containerd/config.toml
-
-   - name: Enable containerd service, and start it.
-     systemd: 
-       name: containerd
-       state: restarted
+   - name: Enable service docker, and enable persistently
+     service: 
+       name: docker
        enabled: yes
-       daemon-reload: yes
 
    - name: Add Google official GPG key
      apt_key:
@@ -113,7 +75,6 @@
          - kubelet
        state: present
        force_apt_get: yes
-
    - name: Enable service kubelet, and enable persistently
      service: 
        name: kubelet
@@ -121,8 +82,8 @@
 
    - name: Reboot all the kubernetes nodes.
      reboot:
-       post_reboot_delay: 60
-       reboot_timeout: 80
-       connect_timeout: 300
+       post_reboot_delay: 10
+       reboot_timeout: 40
+       connect_timeout: 60
        test_command: uptime
 ...
