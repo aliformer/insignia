@@ -11,7 +11,7 @@
    - name: restart kubectl
      ansible.builtin.systemd:
         name: kubelet
-        state: start
+        state: started
 
    - pause: seconds=30
 
