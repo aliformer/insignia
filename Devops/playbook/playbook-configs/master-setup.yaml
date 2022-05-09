@@ -1,6 +1,8 @@
 ---
 - hosts: kubernetes_master_nodes
-  remote_user: anoni
+  vars_files:
+    - env_variables
+  remote_user: "{{ username }}"
   become: yes
   become_method: sudo
   become_user: root
@@ -22,26 +24,26 @@
    - pause: seconds=30
 
    - name: Create directory for kube config.
-     become_user: anoni
+     become_user: "{{ username }}"
      become_method: sudo
      become: yes
      file: 
-       path: /home/{{ansible_user }}/.kube
+       path: /home/{{ username }}/.kube
        state: directory
-       owner: "{{ ansible_user }}"
-       group: "{{ ansible_user }}"
+       owner: "{{ username }}"
+       group: "{{ username }}"
        mode: 0755
 
-   - name: Copy /etc/kubernetes/admin.conf to user's home directory /home/{{ ansible_user }}/.kube/config.
+   - name: Copy /etc/kubernetes/admin.conf to user's home directory /home/{{ username }}/.kube/config.
      become_user: root
      become_method: sudo
      become: yes
      copy:
        src: /etc/kubernetes/admin.conf
-       dest: /home/{{ ansible_user }}/.kube/config
+       dest: /home/{{ username }}/.kube/config
        remote_src: yes
-       owner: "{{ ansible_user }}"
-       group: "{{ ansible_user }}"
+       owner: "{{ username }}"
+       group: "{{ username }}"
        mode: '0644'
 
    - pause: seconds=10
@@ -51,11 +53,11 @@
      become_method: sudo
      become: yes
      file: 
-       path: /home/{{ ansible_user }}/.kube/cache
+       path: /home/{{ username }}/.kube/cache
        state: absent
 
    - name: Create Pod Network & RBAC.
-     become_user: anoni
+     become_user: "{{ username }}"
      become_method: sudo
      become: yes
      command: "{{ item }}"

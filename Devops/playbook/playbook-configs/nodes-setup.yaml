@@ -1,6 +1,8 @@
 ---
 - hosts: "kubernetes_master_nodes, kubernetes_worker_nodes"
-  remote_user: anoni
+  vars_files:
+    - env_variables
+  remote_user: "{{ username }}"
   become: yes
   become_method: sudo
   become_user: root
