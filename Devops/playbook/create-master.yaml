@@ -1,3 +1,4 @@
 ---
-- import_playbook: playbook-configs/nodes-setup.yaml
-- import_playbook: playbook-configs/master-setup.yaml
+- import_playbook: create-user.yaml
+- import_playbook: nodes-setup.yaml
+- import_playbook: master-setup.yaml

@@ -1,13 +1,14 @@
 [users]
-34.101.107.34   
-34.101.203.127
-
+34.101.57.143
+34.101.246.6
+34.101.213.166
 
 [kubernetes_master_nodes]
-master ansible_host=34.101.203.127 
+master ansible_host=34.101.213.166 
 
 [kubernetes_worker_nodes]
-worker ansible_host=34.101.107.34
+worker-1 ansible_host=34.101.57.143 
+worker-2 ansible_host=34.101.246.6
 
 [kubernetes:children]
 kubernetes_master_nodes
