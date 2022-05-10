@@ -14,7 +14,6 @@ worker-2 ansible_host=34.101.246.6
 kubernetes_master_nodes
 kubernetes_worker_nodes
 
-
 [kubernetes:vars]
 ansible_connection = ssh
 
