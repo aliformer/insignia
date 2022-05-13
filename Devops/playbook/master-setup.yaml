@@ -62,16 +62,15 @@
      become: yes
      command: "{{ item }}"
      with_items: 
-        - kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+        - kubectl create -f https://docs.projectcalico.org/manifests tigera-operator.yaml 
+        - kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
 
    - pause: seconds=30
 
    - name: Get the token for joining the nodes with Kuberentes master.
-     become_user: anoni
      shell: kubeadm token create  --print-join-command
      register: kubernetes_join_command
 
    - name: Copy join command to local file.
-     become_user: anoni
-     local_action: copy content="{{ kubernetes_join_command.stdout_lines[0] }}" dest="./kubernetes_join_command"
+     local_action: copy content="{{ kubernetes_join_command.stdout_lines[0] }}" dest="./files/kubernetes_join_command"
 ...

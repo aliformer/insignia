@@ -9,7 +9,10 @@
   gather_facts: yes
 
   tasks:
-   
+         
+   - name: disable firewall if it active
+     shell: ufw disabled
+     
    - name: Make the Swap inactive
      command: swapoff -a
 
@@ -81,6 +84,7 @@
      service: 
        name: kubelet
        enabled: yes
+ 
 
    - name: Reboot all the kubernetes nodes.
      reboot:

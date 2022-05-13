@@ -1,13 +1,9 @@
 ---
 - hosts: users
   become: yes
-  vars_files:
-    - env_variables
-  # vars_prompt:
-
-  #  - name: "username"
-  #    prompt: "Account need to be create in remote server."
-  #    private: no
+  connection: ssh
+  # vars_files:
+  #   - env_variables
 
   tasks:
     - name: creating the user {{ username }}.

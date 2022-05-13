@@ -1,7 +1,5 @@
 [users]
-34.101.57.143
-34.101.246.6
-34.101.213.166
+103.193.14.41 ansible_host=103.193.14.41 ansible_user=root
 
 [kubernetes_master_nodes]
 master ansible_host=34.101.213.166 
@@ -15,6 +13,5 @@ kubernetes_master_nodes
 kubernetes_worker_nodes
 
 [kubernetes:vars]
-ansible_connection = ssh
 
 
