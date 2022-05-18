@@ -29,20 +29,4 @@
 
    - debug:
        msg: "{{ joined_or_not.stdout }}"
-
-- hosts: kubernetes_master_nodes
-  remote_user: "{{ username }}"
-  become: yes
-  become_method: sudo
-  become_user: root
-  gather_facts: yes
-  connection: ssh
-       
-  tasks:
-
-   - name: Configure kubectl command auto-completion.
-     lineinfile:
-       dest: /home/{{ ansible_user }}/.bashrc
-       line: 'source <(kubectl completion bash)'
-       insertafter: EOF
 ...
