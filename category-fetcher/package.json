@@ -1,0 +1,15 @@
+{
+  "name": "category-fetcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "category.js",
+  "dependencies": {
+    "axios": "^0.27.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start" : "node category.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
